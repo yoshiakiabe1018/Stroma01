@@ -6,14 +6,14 @@ library(patchwork)
 === DATA INTEGRATION ===
 
 anchors_MFLN9_20 <- FindIntegrationAnchors(object.list = list(MFLN01,
-                                                               MFLN02,
-                                                                MFLN03,
-                                                                MFLN04,
-                                                                MFLN05,
-                                                                MFLN06,
-                                                                MFLN07,
-                                                                MFLN08,
-                                                                MFLN09),
+                                                              MFLN02,
+                                                              MFLN03,
+                                                              MFLN04,
+                                                              MFLN05,
+                                                              MFLN06,
+                                                              MFLN07,
+                                                              MFLN08,
+                                                              MFLN09),
                                              dims = 1:20)
 Combined_MFLN9_20 <- IntegrateData(anchorset = anchors_MFLN9_20, dims = 1:20)
 
