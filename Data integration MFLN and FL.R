@@ -93,13 +93,45 @@ NESC_PCA <- RunPCA(NESC_scaled, npcs = 100, verbose = FALSE)
 BEC_PCA_60 <- RunUMAP(BEC_PCA, reduction = "pca", dims = 1:60)
 BEC_PCA_60 <- FindNeighbors(BEC_PCA_60, reduction = "pca", dims = 1:60)
 BEC_PCA_60_0.5 <- FindClusters(BEC_PCA_60, resolution = 0.5)
+BEC <- BEC_PCA_60_0.5
 
 LEC_PCA_80 <- RunUMAP(LEC_PCA, reduction = "pca", dims = 1:80)
 LEC_PCA_80 <- FindNeighbors(LEC_PCA_80, reduction = "pca", dims = 1:80)
 LEC_PCA_80_0.5 <- FindClusters(LEC_PCA_80, resolution = 0.5)
+LEC <- LEC_PCA_80_0.5
 
 NESC_PCA_60 <- RunUMAP(NESC_PCA, reduction = "pca", dims = 1:60)
 NESC_PCA_60 <- FindNeighbors(NESC_PCA_60, reduction = "pca", dims = 1:60)
 NESC_PCA_60_1.0 <- FindClusters(NESC_PCA_60, resolution = 1.0)
+NESC <- NESC_PCA_60_1.0
 
 #QC
+#Supervised annotation for arterial, capillary, and venous part in BECs (BEC_ACV)
+
+=== DEG analysis ===
+#Use MFLN data
+BEC_ACV_MFLN <- subset(x = BEC_ACV, subset = MFLNvsFL == "MFLN")
+BEC_MFLN <- subset(x = BEC, subset = MFLNvsFL == "MFLN")
+LEC_MFLN <- subset(x = LEC, subset = MFLNvsFL == "MFLN")
+NESC_MFLN <- subset(x = NESC, subset = MFLNvsFL == "MFLN")
+
+DefaultAssay(BEC_ACV_MFLN) <- "RNA"
+DEGs_BEC_ACV_MFLN <- FindAllMarkers(BEC_ACV_MFLN, only.pos = TRUE, min.pct = 0.20, logfc.threshold = 0.25)
+DEGs_BEC_ACV_MFLN %>% group_by(cluster) %>% top_n(n = 1000, wt = avg_logFC)
+
+DefaultAssay(BEC_MFLN) <- "RNA"
+DEGs_BEC_MFLN <- FindAllMarkers(BEC_MFLN, only.pos = TRUE, min.pct = 0.20, logfc.threshold = 0.25)
+DEGs_BEC_MFLN %>% group_by(cluster) %>% top_n(n = 1000, wt = avg_logFC)
+
+DefaultAssay(LEC_MFLN) <- "RNA"
+DEGs_LEC_MFLN <- FindAllMarkers(LEC_MFLN, only.pos = TRUE, min.pct = 0.20, logfc.threshold = 0.25)
+DEGs_LEC_MFLN %>% group_by(cluster) %>% top_n(n = 1000, wt = avg_logFC)
+
+DefaultAssay(NESC_MFLN) <- "RNA"
+DEGs_NESC_MFLN <- FindAllMarkers(NESC_MFLN, only.pos = TRUE, min.pct = 0.20, logfc.threshold = 0.25)
+DEGs_NESC_MFLN %>% group_by(cluster) %>% top_n(n = 1000, wt = avg_logFC)
+
+
+
+
+
